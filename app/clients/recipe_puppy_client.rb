@@ -18,8 +18,8 @@ class RecipePuppyClient
       end
       threads.each(&:join)
       result.each do |r|
-        raise RecipeClient::SourceError if is_server_error(r.code)
-        raise RecipeClient::QueryError if is_client_error(r.code)
+        raise RecipeClient::SourceError if server_error?(r.code)
+        raise RecipeClient::QueryError if client_error?(r.code)
       end
       result
     end
@@ -28,11 +28,11 @@ class RecipePuppyClient
       BASE_URL + "q=#{query}&p=#{page}"
     end
 
-    def is_server_error(code)
+    def server_error?(code)
       code/500 == 1
     end
 
-    def is_client_error(code)
+    def client_error?(code)
       code/400 == 1
     end
   end
