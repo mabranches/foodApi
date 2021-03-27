@@ -12,7 +12,6 @@ describe RecipeService do
     subject{RecipeService.new(cache, client)}
 
     it 'Raises an exception on source error' do
-
       allow(client).to receive(:search).and_raise(RecipeClient::SourceError.new)
       allow(cache).to receive(:get).and_return(nil)
       allow(cache).to receive(:put)
@@ -22,32 +21,35 @@ describe RecipeService do
       expect { subject.search("test") }.to raise_error(RecipeClient::SourceError)
     end
 
-    it 'Gets result from cache and do not call the client when search is cached' do
 
-      allow(cache).to receive(:get).and_return(items_response_5)
-      expect(client).not_to receive(:search)
-      expect(cache).to receive(:get)
-      expect(cache).not_to receive(:put)
-      expect(subject.search("test")).to eq(items_response_5)
+
+    context 'Query result is cached' do
+      it 'Gets result from cache and do not call the client when search is cached' do
+        allow(cache).to receive(:get).and_return(items_response_5)
+        expect(client).not_to receive(:search)
+        expect(cache).to receive(:get)
+        expect(cache).not_to receive(:put)
+        expect(subject.search("test")).to eq(items_response_5)
+      end
     end
 
-    it 'Gets result from client and update cache when search is not in cache' do
+    context 'Query result is not cached' do
+      it 'Gets result from client and update cache when search is not in cache' do
+        allow(cache).to receive(:get).and_return(nil)
+        allow(client).to receive(:search).and_return(items_response_5)
+        expect(cache).to receive(:get)
+        expect(client).to receive(:search)
+        expect(cache).to receive(:put)
+        expect(subject.search("test")).to eq(items_response_5)
+      end
+
+      it 'Returns empty array if client returns no items' do
+        allow(cache).to receive(:get).and_return(nil)
+        allow(cache).to receive(:put)
+        allow(client).to receive(:search).and_return([])
+        expect(subject.search('test')).to eq([])
+      end
     end
-
-    it 'Returns only 3 results when client returns 3 but query was 20' do
-    end
-
-    #it 'Returns 10 items if only second page is empty' do
-    #end
-
-    #it 'Returns 20 items if first and second page have 10 results' do
-    #end
-
-    it 'Returns empty array if client returns no items' do
-    end
-
-   # it 'Returns empty result on client timeout' do
-    #end
   end
 
   def items_response_10
