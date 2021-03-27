@@ -1,6 +1,6 @@
 class RecipePuppyClient
 
-  BASE_URL = 'http://www.recipepuppy.com/api?'
+  BASE_URL = 'http://www.recipepuppy.com/api?'.freeze
   class << self
     def search(query, size)
       find_in_api(q, size)
