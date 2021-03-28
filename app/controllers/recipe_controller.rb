@@ -1,10 +1,19 @@
 # 'sinatra'
+require './app/services/recipe_service'
+require './app/cache/cache_service'
+require './app/sources/recipe_source'
 require './app/cache/in_memory_cache'
+require './app/sources/recipe_puppy_client'
+require 'sinatra'
 #TODO tratar erros
 # teste de controller
 
-get '/search' do |query|
-  recipe_service.search(query)
+before do
+  content_type 'application/json'
+end
+
+get '/search' do
+  recipe_service.search(params["q"]).to_json
 end
 
 private
@@ -13,7 +22,7 @@ def recipe_service
 end
 
 def cache_service
-  @cache_service ||= CacheService.ne(underlying_cache)
+  @cache_service ||= CacheService.new(underlying_cache)
 end
 
 def recipe_source

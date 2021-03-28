@@ -5,11 +5,11 @@ class RecipeService
     @client = client
   end
 
-  def search(query)
-    result = @cache.get(query, size = 20)
+  def search(query, size = 20)
+    result = @cache.get(query)
     return result if result
     result = @client.search(query, size)
-    @cache.put(result)
+    @cache.put(query, result)
     result
   end
 end

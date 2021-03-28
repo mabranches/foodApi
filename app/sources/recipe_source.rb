@@ -7,6 +7,6 @@ class RecipeSource
   end
 
   def search(query, size)
-    @underline_client.get(query, size)
+    @underline_client.search(query, size)
   end
 end

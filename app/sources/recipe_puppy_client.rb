@@ -21,8 +21,7 @@ class RecipePuppyClient
         JSON.parse(r.body)['results']
       end.flatten
     rescue => e
-      require 'byebug'; byebug
-      LOGGER.error "Error requesting the API"
+      LOGGER.error "Error requesting the API: #{e}"
       raise RecipeSource::SourceError
     end
 
@@ -42,8 +41,6 @@ class RecipePuppyClient
         raise RecipeSource::QueryError if client_error?(r.code)
       end
       result
-    rescue => e
-      raise RecipeSource::SourceError
     end
 
     def search_url(query, page)
