@@ -11,12 +11,9 @@ $(document).ready(function() {
 function search(query){
     if (query.length > 2) {
         $.get( "/search?q=" + query, function(data) {
-            console.log(data);
             result_div = $('#search-result');
-            console.log('clearing results');
             result_div.empty();
             data.forEach(function (d){
-                console.log('Add results');
                update_result(result_div, d);
             })
         }).fail(function() {
