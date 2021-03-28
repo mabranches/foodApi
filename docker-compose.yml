@@ -4,6 +4,7 @@ services:
     build: .
     ports:
       - '4567:4567'
+      - '6379:6379'
     volumes:
       - ".:/app"
     links:
