@@ -36,13 +36,13 @@ describe RecipeService do
         allow(client).to receive(:search).and_return(items_response_5_parsed)
         expect(cache).to receive(:get)
         expect(client).to receive(:search)
-        expect(cache).to receive(:put)
+        expect(cache).to receive(:put).with('test', items_response_5_parsed)
         expect(subject.search("test")).to eq(items_response_5_parsed)
       end
 
       it 'Returns empty array if client returns no items' do
         allow(cache).to receive(:get).and_return(nil)
-        allow(cache).to receive(:put)
+        allow(cache).to receive(:put).with('test', [])
         allow(client).to receive(:search).and_return([])
         expect(subject.search('test')).to eq([])
       end
