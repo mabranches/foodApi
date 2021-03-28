@@ -4,9 +4,13 @@ require './app/cache/cache_service'
 require './app/sources/recipe_source'
 require './app/cache/in_memory_cache'
 require './app/sources/recipe_puppy_client'
+require './app/cache/redis_cache'
 require 'sinatra'
 #TODO tratar erros
 # teste de controller
+
+#UNDERLYING_CACHE = InMemoryCache.new
+UNDERLYING_CACHE = RedisCache.new
 
 before do
   content_type 'application/json'
@@ -16,6 +20,7 @@ get '/search' do
   recipe_service.search(params["q"]).to_json
 end
 
+#TODO como inicializar as coisas apenas uma vez no sinatra
 private
 def recipe_service
   @recipe_service ||= RecipeService.new(cache_service, recipe_source)
@@ -30,7 +35,7 @@ def recipe_source
 end
 
 def underlying_cache
-  @underlying_cache ||= InMemoryCache.new
+  UNDERLYING_CACHE
 end
 
 def underlying_source

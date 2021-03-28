@@ -1,4 +1,7 @@
 require 'redis'
+require 'json'
+
+#TODO configure redis to limit memory usage
 class RedisCache
 
   def initialize
@@ -6,10 +9,11 @@ class RedisCache
   end
 
   def get(key)
-    @redis.get(key)
+    result = @redis.get(key)
+    result.nil? ? result : JSON.parse(result, quirks_mode: true)
   end
 
   def put(key, value)
-    @redis.set(key, value)
+    @redis.set(key, value.to_json)
   end
 end

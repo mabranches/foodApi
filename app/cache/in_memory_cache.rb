@@ -1,10 +1,12 @@
 class InMemoryCache
   MAX_SIZE = 100000
   def initialize
+    puts "cache initialized"
     @cache = {}
   end
 
   def get(key)
+    puts "cache=#{@cache}"
     @cache[key]
   end
 
