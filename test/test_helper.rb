@@ -49,7 +49,13 @@ def items_response_10_parsed
       "thumbnail" => ""
     },
     {
-      "title" => "Arlenes Shrimp Dip,href:http://allrecipes.com/Recipe/Arlenes-Shrimp-Dip/Detail.aspx,ingredients:salad dressing, curry powder, onions, paprika,thumbnail:},{title:Anns Shrimp Etoufee",
+      "title" => "Arlene's Shrimp Dip",
+      "href" => "http://allrecipes.com/Recipe/Arlenes-Shrimp-Dip/Detail.aspx",
+      "ingredients" => "salad dressing, curry powder, onions, paprika",
+      "thumbnail" => ""
+    },
+    {
+      "title" => "Ann's Shrimp Etoufee",
       "href" => "http://allrecipes.com/Recipe/Anns-Shrimp-Etoufee/Detail.aspx",
       "ingredients" => "black pepper, butter, celery, flour, garlic, paprika, red pepper, salt, shrimp, white onion",
       "thumbnail" => "http://img.recipepuppy.com/29873.jpg"

@@ -1,5 +1,6 @@
 require 'rspec'
 require './app/sources/recipe_puppy_client.rb'
+require './app/sources/recipe_source.rb'
 require './test/test_helper'
 require 'rest-client'
 
@@ -16,18 +17,27 @@ describe RecipePuppyClient do
     end
 
     it 'Returns 10 items if only second page is empty' do
+      mock_request("http://www.recipepuppy.com/api?q=test&p=1", items_response_10)
+      mock_request("http://www.recipepuppy.com/api?q=test&p=2", items_response_empty)
+      expect(subject.search('test',20).size).to eq(10)
+      expect(subject.search('test',20)).to match_array(items_response_10_parsed)
     end
 
     it 'Returns 20 items if first and second page have 10 results' do
-    end
-
-    it 'Returns 20 items if first and second page have 10 results' do
+      mock_request("http://www.recipepuppy.com/api?q=test&p=1", items_response_10)
+      mock_request("http://www.recipepuppy.com/api?q=test&p=2", items_response_10)
+      expect(subject.search('test',20).size).to eq(20)
     end
 
     it 'Returns empty array if client returns no items' do
+      mock_request("http://www.recipepuppy.com/api?q=test&p=1", items_response_empty)
+      mock_request("http://www.recipepuppy.com/api?q=test&p=2", items_response_empty)
+      expect(subject.search('test',20).size).to eq(0)
     end
 
-    it 'Returns empty result on client timeout' do
+    it 'Raise SourceError on client timeout' do
+      allow(RestClient::Request).to receive(:execute).and_raise(RestClient::Exceptions::OpenTimeout)
+      expect{subject.search('test',20)}.to raise_error(RecipeSource::SourceError)
     end
   end
 end
