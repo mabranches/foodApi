@@ -19,8 +19,15 @@ class RecipePuppyClient
       result.collect do |r|
         JSON.parse(r.body)['results']
       end.flatten
-    rescue => e
-      LOGGER.error "Error requesting the API: #{e}"
+
+    rescue RecipeSource::SourceError => e
+      LOGGER.error("Source error: #{e}")
+      raise RecipeSource::SourceError
+    rescue RecipeSource::QueryError => e
+      LOGGER.error("Query error: #{e}")
+      raise RecipeSource::QueryError
+    rescue Exception => e
+      LOGGER.error( "Error requesting the API: #{e}")
       raise RecipeSource::SourceError
     end
 

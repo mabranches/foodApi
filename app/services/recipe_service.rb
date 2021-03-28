@@ -1,7 +1,7 @@
-require 'byebug'
+require 'logger'
 class RecipeService
 
-  LOGGER =  Logger.new(STDOUT)
+  LOGGER = Logger.new(STDOUT)
 
   def initialize(cache, client)
     @cache = cache
@@ -9,12 +9,18 @@ class RecipeService
   end
 
   def search(query, size = 20)
+    from_cache(query) || from_source(query, size)
+  end
+
+  private
+  def from_cache(query)
     result = @cache.get(query)
     LOGGER.debug("result = #{result}")
-    if result
-      LOGGER.info("Search for #{query} found in cache")
-      return result
-    end
+    LOGGER.info("Search for #{query} found in cache") if result
+    result
+  end
+
+  def from_source(query, size)
     result = @client.search(query, size)
     LOGGER.info("Search for #{query} used the client and retrieved #{result.size} results of #{size} desired")
     @cache.put(query, result)
