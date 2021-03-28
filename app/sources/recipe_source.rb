@@ -1,4 +1,4 @@
-class RecipeClient
+class RecipeSource
   class QueryError < StandardError; end
   class SourceError < StandardError; end
 

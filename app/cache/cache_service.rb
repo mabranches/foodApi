@@ -1,3 +1,4 @@
+require 'redis'
 class Cache
   attr_reader :cache
 
