@@ -1,8 +1,13 @@
-require 'redis'
-class Cache
-  attr_reader :cache
+class CacheService
+  def initialize(underlying_cache)
+    @cache = underlying_cache
+  end
 
-  def initialize
-    @cache = Redis.new(:host => 'redis')
+  def get(key)
+    @cache.get(key)
+  end
+
+  def put(key, value)
+    @cache.put(key, value)
   end
 end
