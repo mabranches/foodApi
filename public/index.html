@@ -3,8 +3,39 @@ TODO javascript para fazer requisicoes para lib
 esperar 0.5s para fazer a request
 testar em mobile
 -->
-<>
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css" src="/public/recipes.css"></style>
+</head>
 
-HELLO WORLD!!!
+<body>
+<div class="container">
+    <div id="search-field">
+        <input placeholder="type your search here!"></input>
+    </div>
 
+    <div id="search-result">
+    </div>
 
+    <div id="search-element-template" style="visibility: hidden">
+        <div  class="search-element">
+            <div class="title">
+                <a href="{{href}}" >{{title}}</a>
+            </div>
+            <div class="thumbnail">
+                <img src="{{thumbnail}}" />
+            </div>
+            <div class="ingredients">
+                {{ingredients}}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<head>
+    <script type="application/javascript" src="/public/jquery-3.6.0.min.js"></script>
+    <script type="application/javascript" src="/public/recipes.js"></script>
+    <script type="application/javascript" src="/public/mustache.min.js"></script>
+</head>
+</html>

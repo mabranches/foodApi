@@ -16,7 +16,6 @@ class RecipePuppyClient
       pages = size/10
 
       result = request_api(pages, query)
-      #require 'byebug'; byebug
       result.collect do |r|
         JSON.parse(r.body)['results']
       end.flatten

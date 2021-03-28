@@ -12,11 +12,8 @@ require 'sinatra'
 #UNDERLYING_CACHE = InMemoryCache.new
 UNDERLYING_CACHE = RedisCache.new
 
-before do
-  content_type 'application/json'
-end
-
 get '/search' do
+  content_type 'application/json'
   recipe_service.search(params["q"]).to_json
 end
 
