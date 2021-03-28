@@ -6,7 +6,7 @@ testar em mobile
 <!DOCTYPE html>
 <html>
 <head>
-    <style type="text/css" src="/public/recipes.css"></style>
+    <link rel="stylesheet" href="/public/recipes.css">
 </head>
 
 <body>
@@ -18,17 +18,19 @@ testar em mobile
     <div id="search-result">
     </div>
 
-    <div id="search-element-template" style="visibility: hidden">
-        <div  class="search-element">
-            <div class="title">
-                <a href="{{href}}" >{{title}}</a>
-            </div>
-            <div class="thumbnail">
-                <img src="{{thumbnail}}" />
-            </div>
-            <div class="ingredients">
-                {{ingredients}}
-            </div>
+
+</div>
+
+<div id="search-element-template" style="visibility: hidden">
+    <div  class="search-element">
+        <div class="title">
+            <a href="{{href}}" >{{title}}</a>
+        </div>
+        <div class="thumbnail">
+            <img src="{{thumbnail}}" />
+        </div>
+        <div class="ingredients">
+            {{ingredients}}
         </div>
     </div>
 </div>
