@@ -1,3 +1,4 @@
+require 'json'
 class RecipePuppyClient
 
   BASE_URL = 'http://www.recipepuppy.com/api?'.freeze
@@ -16,7 +17,7 @@ class RecipePuppyClient
 
       pages.times.each do |i|
         threads << Thread.new do
-          result[i] = RestClient::Request.execute(method: :get, url: search_url(query, i), timeout: TIMEOUT_TIME)
+          result[i] = RestClient::Request.execute(method: :get, url: search_url(query, i + 1), timeout: TIMEOUT_TIME)
         end
       end
 
@@ -26,7 +27,9 @@ class RecipePuppyClient
         raise RecipeSource::SourceError if server_error?(r.code)
         raise RecipeSource::QueryError if client_error?(r.code)
       end
-      result
+      result.collect do |r|
+        JSON.parse(r.body)['results']
+      end.flatten
     end
 
     def search_url(query, page)

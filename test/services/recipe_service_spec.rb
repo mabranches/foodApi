@@ -1,10 +1,9 @@
 require 'rspec'
 require './app/services/recipe_service.rb'
-require './app/clients/recipe_client.rb'
+require './app/sources/recipe_source.rb'
+require './test/test_helper'
 
 describe RecipeService do
-
-
   describe "#search" do
 
     let(:client) { Object.new }
@@ -12,35 +11,33 @@ describe RecipeService do
     subject{RecipeService.new(cache, client)}
 
     it 'Raises an exception on source error' do
-      allow(client).to receive(:search).and_raise(RecipeClient::SourceError.new)
+      allow(client).to receive(:search).and_raise(RecipeSource::SourceError.new)
       allow(cache).to receive(:get).and_return(nil)
       allow(cache).to receive(:put)
 
       expect(cache).to receive(:get)
       expect(cache).not_to receive(:put)
-      expect { subject.search("test") }.to raise_error(RecipeClient::SourceError)
+      expect { subject.search("test") }.to raise_error(RecipeSource::SourceError)
     end
-
-
 
     context 'Query result is cached' do
       it 'Gets result from cache and do not call the client when search is cached' do
-        allow(cache).to receive(:get).and_return(items_response_5)
+        allow(cache).to receive(:get).and_return(items_response_5_parsed)
         expect(client).not_to receive(:search)
         expect(cache).to receive(:get)
         expect(cache).not_to receive(:put)
-        expect(subject.search("test")).to eq(items_response_5)
+        expect(subject.search("test")).to eq(items_response_5_parsed)
       end
     end
 
     context 'Query result is not cached' do
       it 'Gets result from client and update cache when search is not in cache' do
         allow(cache).to receive(:get).and_return(nil)
-        allow(client).to receive(:search).and_return(items_response_5)
+        allow(client).to receive(:search).and_return(items_response_5_parsed)
         expect(cache).to receive(:get)
         expect(client).to receive(:search)
         expect(cache).to receive(:put)
-        expect(subject.search("test")).to eq(items_response_5)
+        expect(subject.search("test")).to eq(items_response_5_parsed)
       end
 
       it 'Returns empty array if client returns no items' do
@@ -51,82 +48,4 @@ describe RecipeService do
       end
     end
   end
-
-  def items_response_10
-
-    [
-      {
-        "title": "Onion Bagels Recipe",
-        "href": "http://www.grouprecipes.com/5615/onion-bagels.html",
-        "ingredients": "butter, onions, water, bread flour, sugar, salt, sugar, water, yeast, eggs",
-        "thumbnail": "http://img.recipepuppy.com/224906.jpg"
-      },
-      {
-        "title": "Chicken With Pistachio Sauce and Kumara Mash",
-        "href": "http://www.recipezaar.com/Chicken-With-Pistachio-Sauce-and-Kumara-Mash-94707",
-        "ingredients": "butter, chicken, cream, white wine, black pepper, green beans, lemon thyme, milk, olive oil, pistachios, salt",
-        "thumbnail": ""
-      },
-      {
-        "title": "Alains Sweet And Spicy Asian Drumsticks Recipe",
-        "href": "http://www.grouprecipes.com/25169/alains-sweet-and-spicy-asian-drumsticks.html",
-        "ingredients": "black pepper, cayenne, chicken drumstick, cilantro, oregano, thyme, cajun seasoning, garlic, garlic powder, ginger, green onion, rice wine, onion powder, orange juice, orange zest, paprika, pineapple juice, red pepper flakes, salt, salt, vegetable oil, soy sauce, sugar, sesame seeds",
-        "thumbnail": "http://img.recipepuppy.com/307494.jpg"
-      },
-      {
-        "title": "Crispy Oven Fried Mexican Chicken",
-        "href": "http://www.recipezaar.com/Crispy-Oven-Fried-Mexican-Chicken-301010",
-        "ingredients": "cheddar cheese, chili powder, garlic powder, cumin, hot sauce, oregano, paprika, black pepper, salt, juice",
-        "thumbnail": ""
-      },
-      {
-        "title": "Patricias Cherry Butter Recipe",
-        "href": "http://www.grouprecipes.com/11060/patricias-cherry-butter.html",
-        "ingredients": "almond extract, liquid pectin, butter, cinnamon, lemon juice, sugar, tart cherries",
-        "thumbnail": "http://img.recipepuppy.com/342940.jpg"
-      },
-      {
-        "title": "Patatoullie Recipe",
-        "href": "http://www.grouprecipes.com/25947/patatoullie.html",
-        "ingredients": "celery, cheddar cheese, cheese, potato, savory, shallot",
-        "thumbnail": ""
-      },
-      {
-        "title": "Hor Mok Steamed Mixed Seafood Cake Recipe",
-        "href": "http://www.grouprecipes.com/22618/hor-mok-steamed-mixed-seafood-cake.html",
-        "ingredients": "flour, coconut milk, fish, fish sauce, kaffir lime leaves, chili, curry paste, basil, salad greens, coconut",
-        "thumbnail": ""
-      },
-      {
-        "title": "Strawberry Sorbet Recipe",
-        "href": "http://www.grouprecipes.com/4179/strawberry-sorbet.html",
-        "ingredients": "sugar, strawberries, lime juice, water",
-        "thumbnail": "http://img.recipepuppy.com/396220.jpg"
-      }
-    ]
-  end
-
-  def items_response_5
-    [
-      {
-      "title": "Onion Bagels Recipe",
-      "href": "http://www.grouprecipes.com/5615/onion-bagels.html",
-      "ingredients": "butter, onions, water, bread flour, sugar, salt, sugar, water, yeast, eggs",
-      "thumbnail": "http://img.recipepuppy.com/224906.jpg"
-    },
-    {
-      "title": "Chicken With Pistachio Sauce and Kumara Mash",
-      "href": "http://www.recipezaar.com/Chicken-With-Pistachio-Sauce-and-Kumara-Mash-94707",
-      "ingredients": "butter, chicken, cream, white wine, black pepper, green beans, lemon thyme, milk, olive oil, pistachios, salt",
-      "thumbnail": ""
-    },
-    {
-      "title": "Alains Sweet And Spicy Asian Drumsticks Recipe",
-      "href": "http://www.grouprecipes.com/25169/alains-sweet-and-spicy-asian-drumsticks.html",
-      "ingredients": "black pepper, cayenne, chicken drumstick, cilantro, oregano, thyme, cajun seasoning, garlic, garlic powder, ginger, green onion, rice wine, onion powder, orange juice, orange zest, paprika, pineapple juice, red pepper flakes, salt, salt, vegetable oil, soy sauce, sugar, sesame seeds",
-      "thumbnail": "http://img.recipepuppy.com/307494.jpg"
-    }
-    ]
-  end
-
 end

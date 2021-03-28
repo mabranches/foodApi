@@ -4,6 +4,8 @@ ruby '3.0.0'
 
 gem 'sinatra'
 gem 'puma'
+gem 'redis'
+gem 'rest-client'
 
 group :development do
   gem 'rubocop'
