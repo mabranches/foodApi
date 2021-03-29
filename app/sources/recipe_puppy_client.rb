@@ -13,8 +13,8 @@ class RecipePuppyClient
       raise RecipeSource::QueryError.new(e.message)
     rescue RestClient::InternalServerError => e
       raise RecipeSource::SourceError.new(e.message)
-    rescue Exception => e
-      raise RecipeSource::SourceError.new('some error')
+    rescue StandardError => e
+      raise RecipeSource::SourceError.new(e.message)
     end
 
     private

@@ -16,8 +16,10 @@ function search(query){
             data.forEach(function (d){
                update_result(result_div, d);
             })
-        }).fail(function() {
-            alert( "error" );
+        }).fail(function(data) {
+            result_div = $('#search-result');
+            result_div.empty();
+            result_div.append(data.responseJSON.error_message)
         });
     }
 }
@@ -28,7 +30,7 @@ function update_result(div, search_element){
         {
             id: search_element.title,
             title: search_element.title,
-            thumbnail: search_element.thumbnail,
+            thumbnail: (search_element.thumbnail ? search_element.thumbnail : '/public/food.jpg'),
             href: search_element.href,
             ingredients: search_element.ingredients
         });
