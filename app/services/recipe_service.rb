@@ -1,7 +1,6 @@
 require 'logger'
 class RecipeService
-
-  LOGGER = Logger.new(STDOUT)
+  LOGGER = Logger.new($stdout)
 
   def initialize(cache, client)
     @cache = cache
@@ -13,6 +12,7 @@ class RecipeService
   end
 
   private
+
   def from_cache(query)
     result = @cache.get(query)
     LOGGER.debug("result = #{result}")

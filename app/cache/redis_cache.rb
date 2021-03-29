@@ -1,9 +1,8 @@
 require 'redis'
 require 'json'
 
-#TODO configure redis to limit memory usage
+# TODO: configure redis to limit memory usage
 class RedisCache
-
   def initialize
     @redis = Redis.new(host: 'redis', port: 6379, db: 'recipeCache')
   end

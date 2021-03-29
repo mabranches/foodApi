@@ -2,10 +2,10 @@ source 'https://rubygems.org'
 
 ruby '3.0.0'
 
-gem 'sinatra'
 gem 'puma'
 gem 'redis'
 gem 'rest-client'
+gem 'sinatra'
 
 group :development do
   gem 'rubocop'

@@ -1,43 +1,41 @@
 require 'rspec'
-require './app/sources/recipe_puppy_client.rb'
-require './app/sources/recipe_source.rb'
+require './app/sources/recipe_puppy_client'
+require './app/sources/recipe_source'
 require './test/test_helper'
 require 'rest-client'
 
 describe RecipePuppyClient do
-
   subject { RecipePuppyClient }
 
-  describe "#search" do
-
+  describe '#search' do
     it 'Returns only 5 results when client returns only 5 in first page' do
-      mock_request("http://www.recipepuppy.com/api?q=test&p=1", items_response_5)
-      mock_request("http://www.recipepuppy.com/api?q=test&p=2", items_response_empty)
-      expect(subject.search('test',20)).to match_array(items_response_5_parsed)
+      mock_request('http://www.recipepuppy.com/api?q=test&p=1', items_response_5)
+      mock_request('http://www.recipepuppy.com/api?q=test&p=2', items_response_empty)
+      expect(subject.search('test', 20)).to match_array(items_response_5_parsed)
     end
 
     it 'Returns 10 items if only second page is empty' do
-      mock_request("http://www.recipepuppy.com/api?q=test&p=1", items_response_10)
-      mock_request("http://www.recipepuppy.com/api?q=test&p=2", items_response_empty)
-      expect(subject.search('test',20).size).to eq(10)
-      expect(subject.search('test',20)).to match_array(items_response_10_parsed)
+      mock_request('http://www.recipepuppy.com/api?q=test&p=1', items_response_10)
+      mock_request('http://www.recipepuppy.com/api?q=test&p=2', items_response_empty)
+      expect(subject.search('test', 20).size).to eq(10)
+      expect(subject.search('test', 20)).to match_array(items_response_10_parsed)
     end
 
     it 'Returns 20 items if first and second page have 10 results' do
-      mock_request("http://www.recipepuppy.com/api?q=test&p=1", items_response_10)
-      mock_request("http://www.recipepuppy.com/api?q=test&p=2", items_response_10)
-      expect(subject.search('test',20).size).to eq(20)
+      mock_request('http://www.recipepuppy.com/api?q=test&p=1', items_response_10)
+      mock_request('http://www.recipepuppy.com/api?q=test&p=2', items_response_10)
+      expect(subject.search('test', 20).size).to eq(20)
     end
 
     it 'Returns empty array if client returns no items' do
-      mock_request("http://www.recipepuppy.com/api?q=test&p=1", items_response_empty)
-      mock_request("http://www.recipepuppy.com/api?q=test&p=2", items_response_empty)
-      expect(subject.search('test',20).size).to eq(0)
+      mock_request('http://www.recipepuppy.com/api?q=test&p=1', items_response_empty)
+      mock_request('http://www.recipepuppy.com/api?q=test&p=2', items_response_empty)
+      expect(subject.search('test', 20).size).to eq(0)
     end
 
     it 'Raise SourceError on client timeout' do
       allow(RestClient::Request).to receive(:execute).and_raise(RestClient::Exceptions::OpenTimeout.new)
-      expect{subject.search('test',20)}.to raise_error(RecipeSource::SourceError)
+      expect { subject.search('test', 20) }.to raise_error(RecipeSource::SourceError)
     end
   end
 end
@@ -45,11 +43,11 @@ end
 def mock_request(url, result)
   allow(RestClient::Request)
     .to receive(:execute)
-          .with(
-            method: :get,
-            url: url,
-            timeout: RecipePuppyClient::TIMEOUT_TIME
-          ).and_return(result)
+    .with(
+      method: :get,
+      url: url,
+      timeout: RecipePuppyClient::TIMEOUT_TIME
+    ).and_return(result)
 end
 
 def items_response_10
@@ -62,13 +60,13 @@ end
 def items_response_5
   response = Object.new
   allow(response).to receive(:code).and_return(200)
-  allow(response).to receive(:body).and_return("{\"title\":\"Recipe Puppy\",\"version\":0.1,\"href\":\"http://www.recipepuppy.com/\",\"results\":[{\"title\":\"Beer Batter Shrimp\",\"href\":\"http://www.recipezaar.com/Beer-Batter-Shrimp-78333\",\"ingredients\":\"beer, vegetable oil, paprika, flour, salt, shrimp\",\"thumbnail\":\"\"},{\"title\":\"Boiled Shrimp\",\"href\":\"http://www.recipezaar.com/Boiled-Shrimp-99906\",\"ingredients\":\"beer, celery seed, old bay seasoning, red pepper flakes, shrimp, water, white vinegar\",\"thumbnail\":\"\"},{\"title\":\"Outback Steakhouse Grilled Shrimp On The Barbie Recipe\",\"href\":\"http://www.grouprecipes.com/22624/outback-steakhouse-grilled-shrimp-on-the-barbie.html\",\"ingredients\":\"allspice, black pepper, black pepper, butter, cayenne, celery, chili powder, garlic powder, green pepper, lemon juice, mayonnaise, milk, onion powder, paprika, sauce, salt, sauerkraut, shrimp, seasoning, mustard powder, sugar, white vinegar\",\"thumbnail\":\"http://img.recipepuppy.com/210654.jpg\"},{\"title\":\"Garlic Shrimp Pasta Recipe\",\"href\":\"http://www.grouprecipes.com/27449/garlic-shrimp-pasta.html\",\"ingredients\":\"butter, garlic, olive oil, parsley, red pepper flakes, black pepper, shrimp, linguine, white wine\",\"thumbnail\":\"http://img.recipepuppy.com/335312.jpg\"},{\"title\":\"Garlic Shrimp Recipe\",\"href\":\"http://www.grouprecipes.com/47507/garlic-shrimp.html\",\"ingredients\":\"olive oil, sea salt, garlic, shrimp, red pepper flakes, parsley, butter, lemon juice, white wine\",\"thumbnail\":\"http://img.recipepuppy.com/339593.jpg\"}]}")
+  allow(response).to receive(:body).and_return('{"title":"Recipe Puppy","version":0.1,"href":"http://www.recipepuppy.com/","results":[{"title":"Beer Batter Shrimp","href":"http://www.recipezaar.com/Beer-Batter-Shrimp-78333","ingredients":"beer, vegetable oil, paprika, flour, salt, shrimp","thumbnail":""},{"title":"Boiled Shrimp","href":"http://www.recipezaar.com/Boiled-Shrimp-99906","ingredients":"beer, celery seed, old bay seasoning, red pepper flakes, shrimp, water, white vinegar","thumbnail":""},{"title":"Outback Steakhouse Grilled Shrimp On The Barbie Recipe","href":"http://www.grouprecipes.com/22624/outback-steakhouse-grilled-shrimp-on-the-barbie.html","ingredients":"allspice, black pepper, black pepper, butter, cayenne, celery, chili powder, garlic powder, green pepper, lemon juice, mayonnaise, milk, onion powder, paprika, sauce, salt, sauerkraut, shrimp, seasoning, mustard powder, sugar, white vinegar","thumbnail":"http://img.recipepuppy.com/210654.jpg"},{"title":"Garlic Shrimp Pasta Recipe","href":"http://www.grouprecipes.com/27449/garlic-shrimp-pasta.html","ingredients":"butter, garlic, olive oil, parsley, red pepper flakes, black pepper, shrimp, linguine, white wine","thumbnail":"http://img.recipepuppy.com/335312.jpg"},{"title":"Garlic Shrimp Recipe","href":"http://www.grouprecipes.com/47507/garlic-shrimp.html","ingredients":"olive oil, sea salt, garlic, shrimp, red pepper flakes, parsley, butter, lemon juice, white wine","thumbnail":"http://img.recipepuppy.com/339593.jpg"}]}')
   response
 end
 
 def items_response_empty
   response = Object.new
   allow(response).to receive(:code).and_return(200)
-  allow(response).to receive(:body).and_return("{\"title\":\"Recipe Puppy\",\"version\":0.1,\"href\":\"http:\\/\\/www.recipepuppy.com\\/\",\"results\":[]}")
+  allow(response).to receive(:body).and_return('{"title":"Recipe Puppy","version":0.1,"href":"http:\\/\\/www.recipepuppy.com\\/","results":[]}')
   response
 end

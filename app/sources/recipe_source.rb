@@ -1,5 +1,6 @@
 class RecipeSource
   class QueryError < StandardError; end
+
   class SourceError < StandardError; end
 
   def initialize(underline_client)

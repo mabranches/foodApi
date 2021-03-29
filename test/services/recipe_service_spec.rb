@@ -1,14 +1,13 @@
 require 'rspec'
-require './app/services/recipe_service.rb'
-require './app/sources/recipe_source.rb'
+require './app/services/recipe_service'
+require './app/sources/recipe_source'
 require './test/test_helper'
 
 describe RecipeService do
-  describe "#search" do
-
+  describe '#search' do
     let(:client) { Object.new }
     let(:cache) { Object.new }
-    subject{RecipeService.new(cache, client)}
+    subject { RecipeService.new(cache, client) }
 
     it 'Raises an exception on source error' do
       allow(client).to receive(:search).and_raise(RecipeSource::SourceError.new('error message'))
@@ -17,7 +16,7 @@ describe RecipeService do
 
       expect(cache).to receive(:get)
       expect(cache).not_to receive(:put)
-      expect { subject.search("test") }.to raise_error(RecipeSource::SourceError)
+      expect { subject.search('test') }.to raise_error(RecipeSource::SourceError)
     end
 
     context 'Query result is cached' do
@@ -26,7 +25,7 @@ describe RecipeService do
         expect(client).not_to receive(:search)
         expect(cache).to receive(:get)
         expect(cache).not_to receive(:put)
-        expect(subject.search("test")).to eq(items_response_5_parsed)
+        expect(subject.search('test')).to eq(items_response_5_parsed)
       end
     end
 
@@ -37,7 +36,7 @@ describe RecipeService do
         expect(cache).to receive(:get)
         expect(client).to receive(:search)
         expect(cache).to receive(:put).with('test', items_response_5_parsed)
-        expect(subject.search("test")).to eq(items_response_5_parsed)
+        expect(subject.search('test')).to eq(items_response_5_parsed)
       end
 
       it 'Returns empty array if client returns no items' do

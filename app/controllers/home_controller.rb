@@ -1,6 +1,5 @@
-
 get '/' do
-    File.read(File.join('public', 'index.html'))
+  File.read(File.join('public', 'index.html'))
 end
 
 get '/public/:name' do
@@ -10,12 +9,14 @@ get '/public/:name' do
 end
 
 private
+
 def sanitize(str)
-  str.gsub('/','')
+  str.gsub('/', '')
 end
 
 def resolve_content_type(name)
   return 'text/javascript' if name.end_with?('.js')
   return 'text/css' if name.end_with?('.css')
-  return 'test/html'
+
+  'test/html'
 end

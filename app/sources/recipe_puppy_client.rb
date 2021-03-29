@@ -1,25 +1,25 @@
 require 'json'
 require 'logger'
 class RecipePuppyClient
-
   BASE_URL = 'http://www.recipepuppy.com/api?'.freeze
   TIMEOUT_TIME = 2
-  LOGGER =  Logger.new(STDOUT)
+  LOGGER = Logger.new($stdout)
 
   class << self
     def search(query, size)
       find_in_api(query, size)
     rescue RestClient::BadRequest => e
-      raise RecipeSource::QueryError.new(e.message)
+      raise RecipeSource::QueryError, e.message
     rescue RestClient::InternalServerError => e
-      raise RecipeSource::SourceError.new(e.message)
+      raise RecipeSource::SourceError, e.message
     rescue StandardError => e
-      raise RecipeSource::SourceError.new(e.message)
+      raise RecipeSource::SourceError, e.message
     end
 
     private
+
     def find_in_api(query, size)
-      pages = size/10
+      pages = size / 10
 
       result = request_api(pages, query)
       result.flat_map do |r|

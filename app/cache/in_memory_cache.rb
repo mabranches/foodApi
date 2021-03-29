@@ -1,19 +1,16 @@
 class InMemoryCache
-  MAX_SIZE = 100000
+  MAX_SIZE = 100_000
   def initialize
-    puts "cache initialized"
+    puts 'cache initialized'
     @cache = {}
   end
 
   def get(key)
-    puts "cache=#{@cache}"
     @cache[key]
   end
 
   def put(key, value)
-    if @cache.size >= MAX_SIZE
-      @cache.delete[@cache.first[0]]
-    end
+    @cache.delete[@cache.first[0]] if @cache.size >= MAX_SIZE
     @cache[key] = value
   end
 end

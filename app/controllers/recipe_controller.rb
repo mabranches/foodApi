@@ -7,19 +7,19 @@ require './app/sources/recipe_puppy_client'
 require './app/cache/redis_cache'
 require 'sinatra'
 require 'logger'
-#TODO tratar erros
+# TODO: tratar erros
 # teste de controller
 
-#UNDERLYING_CACHE = InMemoryCache.new
+# UNDERLYING_CACHE = InMemoryCache.new
 UNDERLYING_CACHE = RedisCache.new
-LOGGER = Logger.new(STDOUT)
+LOGGER = Logger.new($stdout)
 
 get '/search' do
   content_type 'application/json'
-  recipe_service.search(params["q"]).to_json
+  recipe_service.search(params['q']).to_json
 rescue RecipeSource::QueryError => e
   status 400
-  LOGGER.info("Client error")
+  LOGGER.info('Client error')
   error_parsed(e.message)
 rescue RecipeSource::SourceError => e
   status 500
@@ -29,8 +29,9 @@ rescue StandardError => e
   LOGGER.info(e.message)
 end
 
-#TODO como inicializar as coisas apenas uma vez no sinatra
+# TODO: como inicializar as coisas apenas uma vez no sinatra
 private
+
 def recipe_service
   @recipe_service ||= RecipeService.new(cache_service, recipe_source)
 end
