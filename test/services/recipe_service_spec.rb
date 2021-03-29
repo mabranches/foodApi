@@ -11,7 +11,7 @@ describe RecipeService do
     subject{RecipeService.new(cache, client)}
 
     it 'Raises an exception on source error' do
-      allow(client).to receive(:search).and_raise(RecipeSource::SourceError.new)
+      allow(client).to receive(:search).and_raise(RecipeSource::SourceError.new('error message'))
       allow(cache).to receive(:get).and_return(nil)
       allow(cache).to receive(:put)
 

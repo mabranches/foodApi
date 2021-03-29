@@ -36,7 +36,7 @@ describe RecipePuppyClient do
     end
 
     it 'Raise SourceError on client timeout' do
-      allow(RestClient::Request).to receive(:execute).and_raise(RestClient::Exceptions::OpenTimeout)
+      allow(RestClient::Request).to receive(:execute).and_raise(RestClient::Exceptions::OpenTimeout.new)
       expect{subject.search('test',20)}.to raise_error(RecipeSource::SourceError)
     end
   end
