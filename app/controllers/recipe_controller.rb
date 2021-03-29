@@ -21,12 +21,12 @@ rescue RecipeSource::QueryError => e
   status 400
   LOGGER.info("Client error")
   error_parsed(e.message)
-rescue  RecipeSource::SourceError
+rescue RecipeSource::SourceError => e
   status 500
   error_parsed(e.message)
-rescue Exception => e
+rescue StandardError => e
   error_parsed(e.message)
-  LOGGER.info("Server error")
+  LOGGER.info(e.message)
 end
 
 #TODO como inicializar as coisas apenas uma vez no sinatra
