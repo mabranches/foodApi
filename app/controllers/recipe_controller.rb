@@ -7,8 +7,6 @@ require './app/sources/recipe_puppy_client'
 require './app/cache/redis_cache'
 require 'sinatra'
 require 'logger'
-# TODO: tratar erros
-# teste de controller
 
 # UNDERLYING_CACHE = InMemoryCache.new
 UNDERLYING_CACHE = RedisCache.new
@@ -29,7 +27,6 @@ rescue StandardError => e
   LOGGER.info(e.message)
 end
 
-# TODO: como inicializar as coisas apenas uma vez no sinatra
 private
 
 def recipe_service
