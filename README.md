@@ -34,3 +34,5 @@ We provide a cache to be closer to real cenario such as we would try to minimize
 In a real case scenarios we would take care of some more in depth configurations 
    - API gateway configuration to be before this server and take care of things like rate limit
    - Limit redis memory usage and use a external cluster
+
+teste something
